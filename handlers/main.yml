@@ -1,0 +1,6 @@
+- name: Restart nginx
+  action: service name=nginx state=restarted
+  notify: Check nginx
+
+- name: Check nginx
+  wait_for: port={{ check_port | default(80) }} delay=5 timeout=10
