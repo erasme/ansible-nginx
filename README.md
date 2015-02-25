@@ -7,9 +7,8 @@ CI](http://img.shields.io/travis/erasme/ansible-nginx.svg?style=flat)](http://tr
 [![Ansible
 Galaxy](http://img.shields.io/badge/galaxy-erasme.nginx-660198.svg?style=flat)](https://galaxy.ansible.com/list#/roles/2909)
 
-This role will install nginx, and eventually [php5-fpm](https://github.com/erasme/ansible-php5-fpm) is `nginx_mode` is set to `php5-fpm`.
-
-The role is very basic, and configuration pretty limited.
+This role will install nginx but is very basic, and configuration pretty
+limited.
 
 Requirements
 ------------
@@ -27,8 +26,12 @@ Role Variables
 Tags
 ----
 
+  - nginx
+
 Dependencies
 ------------
+
+  - [php5-fpm](https://github.com/erasme/ansible-php5-fpm) is `nginx_mode` is set to `php5-fpm`.
 
 Example Playbook
 ----------------
