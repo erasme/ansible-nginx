@@ -15,9 +15,8 @@
   notify:
   - Restart nginx
 
-- name: Replaces nginx default server conf for php5-fpm
-  action: template src="../templates/default-fpm.j2" dest=/etc/nginx/sites-available/default
-  when: "'php5-fpm' in nginx_mode and nginx_add_default and just_installed|changed"
+- name: Replaces nginx default server
+  action: template src="../templates/default.j2" dest=/etc/nginx/sites-available/default
+  when: nginx_add_default
   notify:
-  - Restart nginx
-
+    - Restart nginx

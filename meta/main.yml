@@ -15,7 +15,3 @@ galaxy_info:
       - all
   categories:
     - development
-
-dependencies:
-  - { role: erasme.php5-fpm, when: nginx_mode == 'php5-fpm' }
-

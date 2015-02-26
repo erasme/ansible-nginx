@@ -1,4 +1,3 @@
 nginx_root: /var/lib/nginx/
 nginx_worker_connections: 1024
-nginx_mode: "php5-fpm"
-nginx_add_default: yes
+nginx_add_default: no
