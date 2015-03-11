@@ -1,22 +1,32 @@
-- debug: var=nginx
-
 - name: Adds nginx ppa
-  action: apt_repository repo=ppa:nginx/stable
+  apt_repository:
+    repo=ppa:nginx/stable
 
 - name: Adds PPA key
-  apt_key: url=http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x00A6F0A3C300EE8C state=present
+  apt_key: 
+    url=http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x00A6F0A3C300EE8C
+    state=present
 
 - name: Installs nginx
-  action: apt pkg=nginx-full state=latest
+  apt:
+    pkg=nginx-full
+    state=latest
   register: just_installed
 
 - name: Writes nginx.conf
-  action: template src="../templates/nginx.j2" dest=/etc/nginx/nginx.conf
+  template: 
+    src="../templates/nginx.j2"
+    dest=/etc/nginx/nginx.conf
+    validate='nginx -tc %s'
   notify:
   - Restart nginx
 
 - name: Replaces nginx default server
-  action: template src="../templates/default.j2" dest=/etc/nginx/sites-available/default
+  template:
+    src="../templates/default.j2"
+    dest=/etc/nginx/sites-available/default
+    validate='nginx -t'
   when: nginx_add_default
   notify:
     - Restart nginx
+
