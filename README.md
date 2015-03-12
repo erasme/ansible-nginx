@@ -61,7 +61,7 @@ There is a sample Guardfile if you want to work on the role in TDD mode. You nee
     gem install guard-shell
     guard
 
-Now the specs will run whenever you save a file in the role.run.
+Now the specs will run whenever you save a file in the role, the specs will be run.
 
 License
 -------

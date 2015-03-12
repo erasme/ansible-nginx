@@ -1,5 +1,7 @@
+# -- -*- mode: ruby; -*-
+
 guard :shell do
-  watch(/.*\/.*/) do |m|
+  watch(%r{^*/.*\.yml$}) do |m|
     system('vagrant ssh -c "specs -p"')
   end
 end

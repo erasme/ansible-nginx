@@ -21,7 +21,8 @@
     cd ~vagrant/rolespec && make install
     su vagrant -c 'rolespec -i ~/testdir'
     su vagrant -c "ln -s /vagrant/ ~/testdir/roles/$2"
-    su vagrant -c "git clone $3 ~/testdir/tests"
+    su vagrant -c "ln -s /vagrant/tests/$2/ ~/testdir/tests/"
+    # su vagrant -c "git clone $3 ~/testdir/tests"
     exit
   fi
 
@@ -33,5 +34,3 @@
 # fi
 
 cd ~vagrant/testdir && rolespec -r $(ls roles) "$*"
-
-
