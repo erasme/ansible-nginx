@@ -6,11 +6,12 @@ before_install: true
 install: true
 script:
 - echo $TRAVIS_REPO_SLUG
+- echo $TRAVIS_BUILD_DIR
 - git clone --depth 1 https://github.com/nickjj/rolespec
 - cd rolespec ; sudo make install; cd -
-- TRAVIS_REPO_SLUG= rolespec -i ~/testdir
-- ln -s . ~/testdir/roles/ansible-nginx/
-- ln -s tests/ansible-nginx/ ~/testdir/tests/
+- TRAVIS_REPO_SLUG= rolespec -i ~/testdir; ls -lR ~/testdir 
+- ln -s $TRAVIS_BUILD_DIR ~/testdir/roles/ansible-nginx/
+- ln -s $TRAVIS_BUILD_DIR/tests/ansible-nginx/ ~/testdir/tests/
 - cd ~/testdir; TRAVIS_REPO_SLUG= rolespec -r ansible-nginx
 notifications:
   slack:
