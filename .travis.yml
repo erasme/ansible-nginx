@@ -9,7 +9,7 @@ script:
 - git clone --depth 1 https://github.com/nickjj/rolespec
 - cd rolespec ; sudo make install; cd -
 - TRAVIS_REPO_SLUG= rolespec -i ~/testdir
-- ln -s . ~/testdir/roles/ansible-nginx/"
+- ln -s . ~/testdir/roles/ansible-nginx/
 - ln -s tests/ansible-nginx/ ~/testdir/tests/
 - cd ~/testdir; TRAVIS_REPO_SLUG= rolespec -r ansible-nginx
 notifications:
