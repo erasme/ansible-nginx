@@ -14,18 +14,5 @@ install_ansible ${test_ansible_version}
 echo "##### RUN TEST"
 # Check that the playbook runs
 assert_playbook_runs
+assert_in_file /etc/nginx/nginx.conf "ssl_ciphers" '!'
 
-echo "##### IDEMPOTENT TEST"
-# An assertion that re-runs the playbook checking for no changes
-assert_playbook_idempotent
-
-echo "##### IE8_YES TEST"
-# By default, ie8 support is enabled
-# Check the nginx ciphers
-assert_in_file /etc/nginx/nginx.conf "DHE-RSA-AES128-GCM-SHA256"
-
-echo "##### IE8_NO TEST"
-# Check the nginx ciphers when ie8 support is disabled
-#assert_playbook_runs -e 'nginx_ie8_support=no'
-ansible-playbook "${ROLESPEC_PLAYBOOK}" -e 'nginx_ie8_support=no' --connection=local
-assert_in_file /etc/nginx/nginx.conf "DHE-RSA-AES128-GCM-SHA256" '!'
