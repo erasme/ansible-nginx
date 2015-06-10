@@ -15,17 +15,28 @@
 
 - name: Writes nginx.conf
   template: 
-    src="../templates/nginx.j2"
-    dest=/etc/nginx/nginx.conf
-    validate='nginx -tc %s'
-  notify:
-  - Restart nginx
-
-- name: Replaces nginx default server
-  template:
-    src="../templates/default.j2"
-    dest=/etc/nginx/sites-available/default
-  when: nginx_add_default
+    src: "../templates/nginx.j2"
+    dest: "/etc/nginx/nginx.conf"
+    validate: 'nginx -tc %s'
   notify:
     - Restart nginx
 
+- name: Removes nginx default server link
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: Restart nginx
+
+- name: Removes nginx default server
+  file:
+    path: /etc/nginx/sites-available/default
+    state: absent
+  notify: Restart nginx
+
+- name: Writes nginx.conf
+  template: 
+    src: "../templates/nginx.j2"
+    dest: "/etc/nginx/nginx.conf"
+    validate: 'nginx -tc %s'
+  notify:
+    - Restart nginx
