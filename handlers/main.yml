@@ -2,5 +2,9 @@
   action: service name=nginx state=restarted
   notify: Check nginx
 
+- name: Reload nginx
+  action: service name=nginx state=reloaded
+  notify: Check nginx
+
 - name: Check nginx
   wait_for: path="/var/run/nginx.pid" delay=5 timeout=10

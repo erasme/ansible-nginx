@@ -4,80 +4,87 @@ worker_processes {{ ansible_processor_count }};
 pid         /var/run/nginx.pid;
 
 events {
-    worker_connections {{ nginx_worker_connections }};
-    # multi_accept on;
+  worker_connections {{ nginx_worker_connections }};
+  # multi_accept on;
 }
 
 http {
-    ##
-    # Basic Settings
-    ##
-    sendfile    on;
-    tcp_nopush  on;
-    tcp_nodelay on;
+  ##
+  # Basic Settings
+  ##
+  sendfile    on;
+  tcp_nopush  on;
+  tcp_nodelay on;
 
-    # SSL stuff
-    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+  # SSL stuff
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
 
 {% if nginx_ie8_support %}
-    ssl_ciphers "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
+  ssl_ciphers "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
 {% else %}
-    ssl_ciphers "EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH+aRSA+RC4:EECDH:EDH+aRSA:!RC4:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXPORT:!PSK:!SRP:!DSS";
+  ssl_ciphers "EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH+aRSA+RC4:EECDH:EDH+aRSA:!RC4:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXPORT:!PSK:!SRP:!DSS";
 {% endif %}
 
-    ssl_session_cache shared:SSL:32m;
-    ssl_buffer_size 8k;
-    ssl_session_timeout 10m;
+  ssl_session_cache shared:SSL:32m;
+  ssl_buffer_size 8k;
+  ssl_session_timeout 10m;
 
-    keepalive_timeout     65;
-    types_hash_max_size 2048;
+  keepalive_timeout     65;
+  types_hash_max_size 2048;
 
-    server_tokens off;
+  server_tokens off;
 
-    # server_names_hash_bucket_size 64;
-    # server_name_in_redirect off;
+  # server_names_hash_bucket_size 64;
+  # server_name_in_redirect off;
 
-    include       /etc/nginx/mime.types;
-    default_type  application/octet-stream;
+  # Allows big responses from upstreams
+  proxy_buffers 8 8k;
+  proxy_buffer_size 8k;
 
-    ##
-    # Logging Settings
-    ##
-    access_log /var/log/nginx/access.log;
-    error_log /var/log/nginx/error.log;
+  include       /etc/nginx/mime.types;
+  default_type  application/octet-stream;
 
-    ##
-    # Gzip Settings
-    ##
-    gzip on;
-    gzip_disable "msie6";
-    # gzip_vary on;
-    # gzip_proxied any;
-    gzip_comp_level 6;
-    gzip_buffers 16 8k;
-    # gzip_http_version 1.1;
-    gzip_types  application/javascript 
-                application/json 
-                application/x-javascript 
-                application/xml 
-                application/xml+rss 
-                image/svg+xml
-                text/css 
-                text/plain
-                text/xml 
-                text/javascript;
+  ##
+  # Logging Settings
+  ##
+  access_log /var/log/nginx/access.log;
+  error_log /var/log/nginx/error.log;
 
-    ##
-    # If HTTPS, then set a variable so it can be passed along.
-    ##
-    map $scheme $server_https {
-        default off;
-        https on;
-    }
+  ##
+  # Gzip Settings
+  ##
+  gzip on;
+  gzip_disable "msie6";
+  # gzip_vary on;
+  # gzip_proxied any;
+  gzip_comp_level 6;
+  gzip_buffers 16 8k;
+  gzip_http_version 1.1;
+  gzip_types  application/javascript 
+              application/json 
+              application/x-javascript 
+              application/xml 
+              application/xml+rss 
+              image/svg+xml
+              text/css 
+              text/plain
+              text/xml 
+              text/javascript;
 
-    ##
-    # Virtual Host Configs
-    ##
-    include /etc/nginx/conf.d/*.conf;
-    include /etc/nginx/sites-enabled/*;
+  ##
+  # If HTTPS, then set a variable so it can be passed along.
+  ##
+  map $scheme $server_https {
+    default off;
+    https on;
+  }
+
+  ##
+  # Virtual Host Configs
+  ##
+  include /etc/nginx/conf.d/*.conf;
+  include /etc/nginx/sites-enabled/*;
 }
+
+include /etc/nginx/top.d/*.conf;
+
