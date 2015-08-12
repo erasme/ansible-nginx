@@ -3,7 +3,7 @@
     repo=ppa:nginx/stable
 
 - name: Adds PPA key
-  apt_key: 
+  apt_key:
     url=http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x00A6F0A3C300EE8C
     state=present
 
@@ -14,7 +14,7 @@
   register: just_installed
 
 - name: Writes nginx.conf
-  template: 
+  template:
     src: "../templates/nginx.j2"
     dest: "/etc/nginx/nginx.conf"
   notify:
@@ -33,8 +33,15 @@
   notify: Restart nginx
 
 - name: Writes nginx.conf
-  template: 
+  template:
     src: "../templates/nginx.j2"
     dest: "/etc/nginx/nginx.conf"
   notify:
     - Restart nginx
+
+- name: Enables nginx at start
+# service module is severely broken on 14.04
+#  service: name=nginx enabled=yes
+  command: update-rc.d nginx defaults
+  when: just_installed|changed
+
