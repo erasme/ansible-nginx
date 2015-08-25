@@ -1,5 +1,5 @@
 user www-data;
-worker_processes {{ ansible_processor_count }};
+worker_processes {{ ansible_processor_cores }};
 
 pid         /var/run/nginx.pid;
 
