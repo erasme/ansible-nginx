@@ -1,4 +1,5 @@
-nginx_root: /var/lib/nginx/
-nginx_worker_connections: 1024
 nginx_add_default: no
 nginx_ie8_support: yes
+nginx_keepalive_timeout: 75s
+nginx_root: /var/lib/nginx/
+nginx_worker_connections: 1024
