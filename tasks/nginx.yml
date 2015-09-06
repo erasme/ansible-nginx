@@ -39,6 +39,12 @@
   notify:
     - Restart nginx
 
+- name: Replaces logrotate entry
+  template:
+    src: logrotate_nginx.j2
+    dest: /etc/logrotate.d/nginx
+    mode: 0644
+
 - name: Enables nginx at start
 # service module is severely broken on 14.04
 #  service: name=nginx enabled=yes
